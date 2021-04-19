@@ -37,38 +37,33 @@ ResultSet rs=null;
 try {
 //Class.forName(driver);//드라이버 로딩(생략가능)
 conn=DriverManager.getConnection(url,id,pwd);//오라클 서버에 접속
-//String sql=" select empno, ename, job, sal, hiredate, comm, (sal*12+nvl(comm,0)) money, dname from emp e, dept d where e.deptno=d.deptno ";
 String sql=
-"select e.deptno, dname, count(*), sum(sal),round(avg(sal)),max(sal),min(sal) from emp e, dept d where e.deptno=d.deptno and dname=? group by e. deptno, dname";
+" select deptno, dname, count(*)" 
++" from department d, student s"
++" where d.deptno=s.deptno1 and dname like ?" 
+	+" group by deptno, dname";
+
 
 pstmt=conn.prepareStatement(sql);
 String name="";
 if(request.getParameter("dname")!=null){
 	name=request.getParameter("dname");
 }
-pstmt.setString(1, name);
+pstmt.setString(1, name+"%");
 rs=pstmt.executeQuery();
 %>
 <!-- <a href="이동할 주소">하이퍼 링크텍스트</a> -->
 <table border="1">
 	<tr> 	<!-- table row테이블의 행 -->
-		<td>부서코드</td><!-- table division 테이블의 열 -->
+		<td>부서코드</td><!-- table divsion 테이블의 열 -->
 		<td>부서이름</td>
-		<td>직원수</td>
-		<td>합</td>
-		<td>평균</td>
-		<td>최대</td>
-		<td>최소</td>
+		<td>수</td>
 		</tr>
 <%
 while(rs.next()) {//1개의 레코드를 읽음, 내용이 있으면 true, 없으면 false
 int deptno=rs.getInt("deptno");//get자료형(필드명)or get자료형(인덱스)
 String dname=rs.getString("dname");
 int count=rs.getInt(3);
-int sum=rs.getInt(4);
-double avg=rs.getDouble(5);
-int max=rs.getInt(6);
-int min=rs.getInt(7);
 
 
 %>
@@ -76,10 +71,6 @@ int min=rs.getInt(7);
 		<td><%=deptno%></td>
 		<td><%=dname%></td>
 		<td><%=count%></td>
-		<td><%=sum%></td>
-		<td><%=avg%></td>
-		<td><%=max%></td>
-		<td><%=min%></td>
 	</tr>
 <%
 }

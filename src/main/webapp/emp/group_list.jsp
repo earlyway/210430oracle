@@ -7,12 +7,6 @@
 <title>Insert title here</title>
 </head>
 <body> <!-- 문서의 내용 -->
-<form method="post"
->부서이름 <input type="text" name="dname">
-<input type="submit" value="확인">
-</form>
-
-
 hello
 <%
 String a="안녕하세요";
@@ -38,48 +32,43 @@ try {
 //Class.forName(driver);//드라이버 로딩(생략가능)
 conn=DriverManager.getConnection(url,id,pwd);//오라클 서버에 접속
 //String sql=" select empno, ename, job, sal, hiredate, comm, (sal*12+nvl(comm,0)) money, dname from emp e, dept d where e.deptno=d.deptno ";
-String sql=
-"select e.deptno, dname, count(*), sum(sal),round(avg(sal)),max(sal),min(sal) from emp e, dept d where e.deptno=d.deptno and dname=? group by e. deptno, dname";
-
+String sql=" select*from emp_v ";
 pstmt=conn.prepareStatement(sql);
-String name="";
-if(request.getParameter("dname")!=null){
-	name=request.getParameter("dname");
-}
-pstmt.setString(1, name);
 rs=pstmt.executeQuery();
 %>
 <!-- <a href="이동할 주소">하이퍼 링크텍스트</a> -->
+<a href="emp_form.jsp">사원등록</a>
 <table border="1">
 	<tr> 	<!-- table row테이블의 행 -->
-		<td>부서코드</td><!-- table division 테이블의 열 -->
-		<td>부서이름</td>
-		<td>직원수</td>
-		<td>합</td>
-		<td>평균</td>
-		<td>최대</td>
-		<td>최소</td>
+		<td>사번</td><!-- table divsion 테이블의 열 -->
+		<td>이름</td>
+		<td>직급</td>
+		<td>급여</td>
+		<td>입사일자</td>
+		<td>커미션</td>
+		<td>연봉</td>
+		<td>부서명</td>
 		</tr>
 <%
 while(rs.next()) {//1개의 레코드를 읽음, 내용이 있으면 true, 없으면 false
-int deptno=rs.getInt("deptno");//get자료형(필드명)or get자료형(인덱스)
+String empno=rs.getString("empno");//get자료형(필드명)
+String ename=rs.getString("ename");
+String job=rs.getString("job");
+int sal=rs.getInt("sal");
+String hiredate=rs.getString("hiredate").substring(0,10);
+int comm=rs.getInt("comm");
+int money=rs.getInt("money");
 String dname=rs.getString("dname");
-int count=rs.getInt(3);
-int sum=rs.getInt(4);
-double avg=rs.getDouble(5);
-int max=rs.getInt(6);
-int min=rs.getInt(7);
-
-
 %>
 	<tr>
-		<td><%=deptno%></td>
+		<td><%=empno%></td>
+		<td><%=ename%></td>
+		<td><%=job%></td>
+		<td><%=sal%></td>
+		<td><%=hiredate%></td>
+		<td><%=comm%></td>
+		<td><%=money%></td>
 		<td><%=dname%></td>
-		<td><%=count%></td>
-		<td><%=sum%></td>
-		<td><%=avg%></td>
-		<td><%=max%></td>
-		<td><%=min%></td>
 	</tr>
 <%
 }

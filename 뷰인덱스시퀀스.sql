@@ -118,3 +118,53 @@ insert into bankk values('110-12-1156-10','신한','김',10000);
 insert into bankk values('110-20-6851-83','신한','박',80000);
 
 select*from bankk;
+
+
+
+
+
+--시퀀스 생성
+--200부터 시작, 1씩 증가, 최대값 100000, 캐쉬사용 안함, 순환안함
+drop sequence c_emp_seq;
+create sequence c_emp_seq
+start with 200 --시작값
+increment by 1; --증가값
+--시퀀스.nextval 다음번호 발급
+select c_emp_seq.nextval from dual;
+--시퀀스.currval 현재번
+select c_emp_seq.currval from dual;
+
+delete from c_emp;
+--시퀀스에서 번호를 발급받은 후, 레코드가 저장됨
+insert into c_emp values(c_emp_seq.nextval,'kim2',3000,'010-1111-2222',10);
+select *from c_emp;
+
+--테이블 만들기
+create table test(
+idx number primary key,
+writer varchar2(50) not null
+);
+--idx필드의 최대값에 +1, 레코드가 없으므로 null
+select max(idx)+1 from test;
+--nvl(a,b) a가 null이면 b
+select nvl(max(idx)+1,1) from test;
+--먼저 select명령어를 실행하여 번호를 계산한 후 레코드가 저장됨
+insert into test values(1,'kimmy');
+insert into test values ((select nvl(max(idx)+1,1) from test),'kimmy');
+delete from test;
+select*from test;
+
+----------------------------------------------------
+--c_emp테이블을 복사한 v_emp테이블.
+create table v_emp as select *from c_emp where 1=0;
+--v_emp 테이블에 데이터입력시 sequence를 이용해서 id를 입력하도록.
+--206에서 시작하여 1씩증가되고 최대값은 999로 설정하여 sequence를 생성하시오.
+create sequence v_emp_seq
+start with 206 --시작값
+increment by 1; --증가값
+maxvalue 999;
+
+--sequence를 이용해서 사번을 입력하고 이름 김철수, 부서 10번부서로 배치하여 데이터를 입력하시오.
+insert into v_emp(id, name, dept_id) values (v_emp_seq.nextval,'김철수',10);
+delete from v_emp;
+select*from v_emp;

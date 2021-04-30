@@ -190,3 +190,47 @@ end;
 set serveroutput on
 --저장 프로시저를 실행
 execute cursor_test3;
+
+
+
+
+
+
+--트리거
+create or replace trigger sum_trigger
+after--메인쿼리가 실행된 이후에 자동으로 동작하는 트리거
+    insert or update or delete on emp--emp테이블에 대한 추가,수정,삭제 쿼리 대상
+declare
+    avg_sal number;
+begin
+    select round(avg(sal),1) into avg_sal from emp;
+    dbms_output.put_line('급여 평균:'|| avg_sal);
+end;
+/
+set serveroutput on;
+-- 평균 급여 계산
+select avg(sal) from emp;
+insert into emp(empno, ename, hiredate, sal)values
+(3002,'박철수',sysdate,500);
+update emp set sal=600 where empno=3002;
+delete from emp where empno(3002);
+
+commit;
+
+select*from student;
+select*from lecture;
+
+select*from emp;
+
+
+
+create table addre(
+username varchar2(20) not null primary key,
+useraddress varchar2(50) not null,
+userphone varchar2(30) not null,
+useremail varchar2(50) not null
+);
+insert into addre values('홍길동','서울 서초','010-1111-1123','hong@gmail');
+insert into addre values('박길동','서울 은평','010-1111-1123','park@gmail');
+insert into addre values('전길동','서울 강남','010-1111-1123','jeon@gmail');
+select *from addre;

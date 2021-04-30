@@ -36,7 +36,7 @@ drop index emp_ename_idx;
 
 
 
-
+drop table emp3;
 create table emp3(
 no number,
 name varchar2(10),
@@ -67,9 +67,58 @@ begin --실행부
     end loop;
 end;
 /
-
 select*from emp3;
-select count(*) from emp3;
+
+
+select*from emp_copy;
+
+drop table emp_copy;
+
+create table emp_copy(
+no number,
+ename varchar2(20),
+empno number
+);
+
+declare
+    i number:=1; --변수 자료형 := 초기값;
+    empno number :=0;
+    ename varchar2(20) :='name';
+begin --실행부
+    while i<=100000 loop--조건문(반복)
+    if i mod 2=0 then-- mod--->>나머지. if 2로나눈 나머지가 0이면..
+        ename :='name' || to_char(i);
+        empno :=300;
+        else
+        ename :='name' || to_char(i);
+        empno :=250;
+    end if;
+    insert into emp_copy values(i,ename,empno);
+    i := i+1;
+    end loop;
+end;
+/
+
+select*from dept;
+select*from dept_copy;
+create table dept_copy;
+
+--시퀀스 생성
+--100부터 시작, 10씩 증가, 최대값 10000, 캐쉬사용 안함, 순환안함
+create sequence dept_seq
+start with 100 --시작값
+increment by 10; --증가값
+--시퀀스.nextval 다음번호 발급
+select dept_seq.nextval from dual;
+--시퀀스.currval 현재번
+select dept_seq.currval from dual;
+
+delete from dept_copy;
+--시퀀스에서 번호를 발급받은 후, 레코드가 저장됨
+insert into dept_copy values(dept_seq.nextval,100,'교무부','부산');
+select *from dept_copy;
+
+
 
 
 
@@ -139,7 +188,8 @@ delete from c_emp;
 insert into c_emp values(c_emp_seq.nextval,'kim2',3000,'010-1111-2222',10);
 select *from c_emp;
 
---테이블 만들기
+--테이블 만들
+drop table test;
 create table test(
 idx number primary key,
 writer varchar2(50) not null
@@ -156,6 +206,7 @@ select*from test;
 
 ----------------------------------------------------
 --c_emp테이블을 복사한 v_emp테이블.
+drop table v_emp_seq;
 create table v_emp as select *from c_emp where 1=0;
 --v_emp 테이블에 데이터입력시 sequence를 이용해서 id를 입력하도록.
 --206에서 시작하여 1씩증가되고 최대값은 999로 설정하여 sequence를 생성하시오.
@@ -163,8 +214,20 @@ create sequence v_emp_seq
 start with 206 --시작값
 increment by 1; --증가값
 maxvalue 999;
+select*from v_emp;
 
 --sequence를 이용해서 사번을 입력하고 이름 김철수, 부서 10번부서로 배치하여 데이터를 입력하시오.
 insert into v_emp(id, name, dept_id) values (v_emp_seq.nextval,'김철수',10);
 delete from v_emp;
 select*from v_emp;
+
+
+
+
+create table emp_copy as select *from emp where 1=0;
+--v_emp 테이블에 데이터입력시 sequence를 이용해서 id를 입력하도록.
+--206에서 시작하여 1씩증가되고 최대값은 999로 설정하여 sequence를 생성하시오.
+create sequence v_emp_seq
+start with 206 --시작값
+increment by 1; --증가값
+maxvalue 999;

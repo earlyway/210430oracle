@@ -69,7 +69,52 @@ select*from emp;
 execute update_sal(7369);
 commit;
 
+create or replace procedure data_insert(emp_copy in number)
+is begin
+insert emp_copy
+set 
+
+
+
+create or replace procedure del_emp(v_empno,v_ename,v_job,v_mgr,v_hiredate,v_sal,v_comm,v_deptno in varchar)
+is begin
+delete emp
+end;
+/
+execute delete_emp;
 
 
 
 
+
+select *from emp;
+select min(sal) from emp;
+select max(sal) from emp;
+select sum(sal) from emp order by job;
+
+
+
+select empno, ename, sal
+from emp where ename like '_철%' 
+order by empno asc;
+
+select empno, ename, sal, nvl(comm,0), sal*12 + nvl(comm,0), deptno
+from emp;
+comm값을 정해주지않았는데 값을 호출해서 숫자로 계산을 하라해서 null이 나옴.
+
+select*from dept;
+
+select empno, ename, sal, nvl(comm,0), sal*12 + nvl(comm,0), e.deptno, d.dname
+from emp e, dept d
+where e.deptno=d.deptno;
+
+
+
+create table proproduct(
+procode varchar2(6) primary key,
+proname varchar2(20) not null
+);
+insert into proproduct values('12345','에어컨');
+insert into proproduct values('16789','선풍기');
+select*from proproduct;
+commit;

@@ -21,4 +21,6 @@ public class db {
 		return conn;// 커넥션을 리턴
 	}
 
+	INSERT INTO member VALUES('kim','1234','김');
+
 }

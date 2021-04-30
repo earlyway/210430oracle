@@ -31,7 +31,7 @@ try{
 	pstmt.setString(5, request.getParameter("hiredate"));
 	pstmt.setInt(6, Integer.parseInt(request.getParameter("comm")));
 	pstmt.executeUpdate();//레코드가 저장됨
-	response.sendRedirect("list.jsp");//list.jsp 페이지로 이동
+	response.sendRedirect("old_list.jsp");//list.jsp 페이지로 이동
 
 }catch(Exception e){
 e.printStackTrace();
